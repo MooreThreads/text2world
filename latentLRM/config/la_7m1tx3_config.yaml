@@ -1,0 +1,77 @@
+# This is a sample config file for {7m1t}x3 Long-LRM with token merging at 9th layer. 
+config_name: 7m1tx3+bs32+dl3dv+re10k+acid+low+dl3dv-high
+# general settings
+checkpoint_dir: "checkpoints"
+evaluation_dir: "evaluation"
+api_key_path: "./api_keys.yaml"
+use_tf32: true
+use_amp: true
+amp_dtype: "bf16"
+version: 4
+video_model_path: '/jfs/shiyu.yang/models/CogVideoXV1.1-5b'
+
+data:
+  resize_h: 480
+  resize_w: 720
+  datasets: ['dl3dv','acid','re10k']
+  num_input_frames: 49
+  num_target_frames: 12
+
+model:
+  num_layers: 24
+  patch_size: 8
+  dim: [ 1024]
+  block_type: "mmmmmmmtmmmmmmmtmmmmmmmt"
+  merge_layers: []
+  
+  transformer:
+    head_dim: 64
+  mamba2:
+    d_state: 256
+
+  num_global_tokens: 2
+  gaussians:
+    sh_degree: 0
+    near_plane: 0.01
+    far_plane: 1000000.0
+    scale_bias: -6.9
+    scale_max: -1.2
+    opacity_bias: -2.0
+    align_to_pixel: true
+    max_dist: 500.0
+  
+training:
+  resume_ckpt: '/jfs/qian.ren/latentLRM/checkpoints/7m1tx3+bs32+dl3dv+re10k+acid+low+ver-2/checkpoint_000051800.pt'
+  # resume_ckpt: '/jfs/qian.ren/latentLRM/checkpoints/7m1tx3+bs32+dl3dv+ver-3/checkpoint_000001700.pt'
+  reset_training_state: true
+  # optimizer
+  lr: 0.00001
+  beta1: 0.9
+  beta2: 0.95
+  weight_decay: 0.05
+  warmup_steps: 2000
+  scheduler_type: "cosine"
+  grad_accum_steps: 1
+  grad_clip_norm: 1.0
+  allowed_gradnorm_factor: 10
+
+  batch_size_per_gpu: 4
+  grad_accum_steps: 1
+
+  # dataloader
+  num_workers: 4
+  prefetch_factor: 4
+  l2_loss: 1.0
+  perceptual_loss: 1.0
+  opacity_loss: 0.1
+  gaussian_depth_loss: 0.01
+
+  # losses
+  l2_loss: 1.0
+  perceptual_loss: 1.0
+  # perceptual loss settings from https://github.com/zhengqili/Crowdsampling-the-Plenoptic-Function/blob/master/models/networks.py#L1478
+  perceptual_out_idx: [4, 9, 14, 23, 32]
+  perceptual_out_weights: [0.3846, 0.2083, 0.2703, 0.1786, 6.6667]
+  perceptual_feature_scale: 255.0
+  opacity_loss: 0.1
+  gaussian_depth_loss: 0.01
