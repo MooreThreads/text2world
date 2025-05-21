@@ -12,8 +12,8 @@ A Text2World pipeline built based on 3D Gaussian Splatting (3D GS) and video gen
 
 ## BenchMark
 Evaluation LatentLRM on both re10k,acid and generate videos.
-PSNR: 29 (acid,re10k test,1900 scenes)
-PSNR: 20 (on generate video, 1000 prompt scenes)
+* PSNR: 29 (acid,re10k test,1900 scenes)
+* PSNR: 20 (on generate video, 1000 prompt scenes)
 
 
 ## Dataset  
@@ -63,7 +63,7 @@ python generate_nonmap_api.py \
     --controlnet_transformer_attention_head_dim 64 \  
     --controlnet_transformer_out_proj_dim_factor 64 \  
     --num_inference_steps 20
-
+```
 
 ### Information
 基于 3D GS和 video 生成技术构建的 Text2world pipeline。
