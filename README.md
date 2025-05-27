@@ -28,6 +28,8 @@ Random camera parameters from RE10K dataset were used as input.
 |-----------|-----------|-----------|
 | ![Demo](./assets/demo1.gif) | ![Demo](./assets/demo2.gif) | ![Demo](./assets/demo3.gif) |
 | ![Demo](./assets/demo4.gif) | ![Demo](./assets/demo5.gif) | ![Demo](./assets/demo6.gif) |
+|![Demo](./assets/demo7.gif) |![Demo](./assets/demo8.gif) |![Demo](./assets/demo9.gif) |
+|![Demo](./assets/demo10.gif) |![Demo](./assets/demo11.gif) |![Demo](./assets/demo12.gif) |
 
 ### Dataset
 Data sources:
