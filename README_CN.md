@@ -4,19 +4,18 @@
 基于 3D高斯溅射和视频生成技术构建的 Text2world pipeline。
 特性：
 1. 第一个开源的基于T2V模型（AC3D-cogvideox Version）和 mamba-transformer架构 LRM 的 pipeline
-2. 更高效的LRM 重建模型：由视频 VAE 的 encoder 和mamba-transformers结构组成，使得LRM 模型可以输入更多的图片的同时，节约更多的显存。
+2. 更高效的LRM 重建模型：由视频 VAE 的 encoder 和mamba-transformers结构组成，使得LRM 模型可以输入更多的图片的同时节约更多的显存。
 3. 提供两种路径构建 3DGS。Normal Path将latent 进行 decoder 和后处理得到的视频重新 经过encoder 生成 video latent;Remap Path（Experimental）: 通过 remap 模型将 video latent 直接映射到 decoder 生成的 latent 中，减少不必要的 decoder-encoder和后处理过程，为将来的端到端训练做准备。
 
 
 ### BENCHMARK
 为了验证pipeline 的有效性以及LRM 模型的性能构建验证数据集：
 * 公开数据集用于评估 LRM 在真实场景下的重建效果
-* 合成数据集用于评估 LRM 在生成场景下的重建效果。我们用 llm 生成了 1000条场景提示词包含 Natural Landscapes (200 prompts)，Urban Environments (150 prompts)，Interiors (150 prompts)，Fantasy Settings (150 prompts)，Sci-Fi Settings (150 prompts)，Historical Settings (100 prompts)，Abstract Compositions (100 prompts)），并从re10k 数据集中随机抽取 camera参数作为输入。
 
 |dataset|PSNR|SSIM|lpips|
 |-----------|-----|------|-----------|
 |public|29.34|0.87|0.205|
-||||
+
 ### Example
 |  参考示例  | 参考示例      |  参考示例   | 
 |-----------|-----------|-----------|

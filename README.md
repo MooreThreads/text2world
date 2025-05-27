@@ -13,13 +13,7 @@ Features:
 ### BENCHMARK
 To validate the pipeline's effectiveness and LRM model performance, we created evaluation datasets:
 - **Public dataset**: Evaluates LRM's reconstruction performance in real-world scenarios
-- **Synthetic dataset**: Evaluates LRM's reconstruction in generated scenes. We used LLM to generate 1,000 scene prompts covering:
-  - Natural Landscapes (200 prompts)
-  - Urban Environments (150 prompts)
-  - Interiors (150 prompts)
-  - Fantasy Settings (150 prompts)
-  - Sci-Fi Settings (150 prompts)
-  - Historical Settings (100 prompts)
+
   - Abstract Compositions (100 prompts)
   
 Random camera parameters from RE10K dataset were used as input.
@@ -27,7 +21,7 @@ Random camera parameters from RE10K dataset were used as input.
 | Dataset    | PSNR  | SSIM | LPIPS |
 |------------|-------|------|-------|
 | Public     | 29.34 | 0.87 | 0.205 |
-| Synthetic  |       |      |       |
+
 
 ### Example
 | Example 1 | Example 2 | Example 3 |
