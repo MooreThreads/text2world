@@ -24,7 +24,7 @@ Random camera parameters from RE10K dataset were used as input.
 
 
 ### Example
-| Example 1 | Example 2 | Example 3 |
+| Render | Render | Render|
 |-----------|-----------|-----------|
 | ![Demo](./assets/demo1.gif) | ![Demo](./assets/demo2.gif) | ![Demo](./assets/demo3.gif) |
 | ![Demo](./assets/demo4.gif) | ![Demo](./assets/demo5.gif) | ![Demo](./assets/demo6.gif) |
