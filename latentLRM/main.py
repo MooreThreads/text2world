@@ -58,10 +58,6 @@ if config.get("config_name", None) is not None:
     config_name = config.config_name
 version = config.get('version', 0)
 config_name += f'+ver-{version}'
-if version == 0:
-    from data.datasetv0 import Dataset
-    from model.llrmv0 import LongLRM
-
 
 checkpoint_dir = os.path.join(config.checkpoint_dir, config_name)
 os.makedirs(checkpoint_dir, exist_ok=True)

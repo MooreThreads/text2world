@@ -12,11 +12,7 @@ Features:
 
 ### BENCHMARK
 To validate the pipeline's effectiveness and LRM model performance, we created evaluation datasets:
-- **Public dataset**: Evaluates LRM's reconstruction performance in real-world scenarios
-
-  - Abstract Compositions (100 prompts)
-  
-Random camera parameters from RE10K dataset were used as input.
+- **Public dataset**: Evaluates LRM's reconstruction performance in real-world scenarios.（from ac3d, re10k test set with 1980 scenes）
 
 | Dataset    | PSNR  | SSIM | LPIPS |
 |------------|-------|------|-------|

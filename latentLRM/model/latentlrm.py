@@ -195,41 +195,39 @@ class GaussianRenderer(torch.autograd.Function):
 
 
 class Tokenizer(nn.Module):
-    def __init__(self, o_dim=1024):
+    def __init__(self, o_dim=1024, version=2):
         super().__init__()
-        self.camera_branch = nn.Sequential(
-            nn.Conv3d(
-                in_channels=6,
-                out_channels=1024,
-                kernel_size=(4, 16, 16),
-                stride=(4, 16, 16),
-                padding=(2, 0, 0)
-            ),
-            nn.LayerNorm(1024)
-        )
-        self.latent_branch = nn.Sequential(
-            nn.Conv2d(16, 1024, kernel_size=2, stride=2),
-            nn.LayerNorm(1024),
-        )
+        if version == 0:
+            self.camera_branch = nn.Sequential(
+                nn.Conv3d(
+                    in_channels=6,
+                    out_channels=1024,
+                    kernel_size=(4, 16, 16),
+                    stride=(4, 16, 16),
+                    padding=(2, 0, 8)
+                ),
+                nn.LayerNorm(1024)
+            )
+            self.latent_branch = nn.Sequential(
+                nn.Conv2d(16, 1024, kernel_size=2, stride=2, padding=(0, 1)),
+                nn.LayerNorm(1024),
+            )
+        else:
+            self.camera_branch = nn.Sequential(
+                nn.Conv3d(
+                    in_channels=6,
+                    out_channels=1024,
+                    kernel_size=(4, 16, 16),
+                    stride=(4, 16, 16),
+                    padding=(2, 0, 0)
+                ),
+                nn.LayerNorm(1024)
+            )
+            self.latent_branch = nn.Sequential(
+                nn.Conv2d(16, 1024, kernel_size=2, stride=2),
+                nn.LayerNorm(1024),
+            )
         self.fusion = nn.Linear(2048, o_dim)
-
-    def forward(self, latent, camera_embedding):
-        # latent 先转化成 (B*t C W H)
-        B, C, t, H, W = latent.shape
-        latent = rearrange(latent, 'B C t H W -> (B t) C H W')
-        latent = self.latent_branch[0](latent)
-        latent = rearrange(
-            latent, '(B t) C H W -> B (t H W) C', t=t, B=B)  # B N C
-        latent = self.latent_branch[1](latent)  # B N C
-
-        camera_embedding = self.camera_branch[0](camera_embedding)  # b c t h w
-        b, c, tt, hh, ww = camera_embedding.shape
-        camera_embedding = rearrange(
-            camera_embedding, "B C t H W -> B (t H W) C ")  # B N C
-        camera_embedding = self.camera_branch[1](camera_embedding)  # B N C
-
-        # (B N 2C) ->(B N C)
-        return self.fusion(torch.concat([latent, camera_embedding], dim=-1)), tt, ww, hh
 
 
 class LongLRM(nn.Module):
@@ -250,18 +248,26 @@ class LongLRM(nn.Module):
             nn.init.trunc_normal_(self.global_token_init, std=0.02)
         # self.tokenizer = nn.Linear(input_dim * self.patch_size ** 2, self.dim_start, bias=False)
         self.vae = self.load_video_encoder()
-        self.tokenizer = Tokenizer(self.dim_start)
+        self.tokenizer = Tokenizer(self.dim_start, config.version)
         self.input_layernorm = nn.LayerNorm(self.dim_start, bias=False)
         self.processor = Processor(config)
         self.layernorm = nn.LayerNorm(self.dim_out, bias=False)
-        self.tokenDecoder = nn.ConvTranspose3d(
-            in_channels=self.dim_out,
-            out_channels=(1 + (config.model.gaussians.sh_degree + 1)
-                          ** 2 * 3 + 3 + 4 + 1),
-            kernel_size=(5, 8, 8),
-            stride=(4, 8, 8),
-            padding=(2, 0, 0),
-        )
+        if version == 0:
+            self.tokenDecoder = nn.ConvTranspose3d(
+                in_channels=self.dim_out,
+                out_channels=(1 + (sh_degree + 1) ** 2 * 3 + 3 + 4 + 1),
+                kernel_size=(5, 8, 8),
+                stride=(4, 8, 8),
+                padding=(2, 0, 2),  # padding=(2, 0, 0),
+            )
+        else:
+            self.tokenDecoder = nn.ConvTranspose3d(
+                in_channels=self.dim_out,
+                out_channels=(1 + (sh_degree + 1) ** 2 * 3 + 3 + 4 + 1),
+                kernel_size=(5, 8, 8),
+                stride=(4, 8, 8),
+                padding=(2, 0, 0)
+            )
 
         self.tokenizer.apply(_init_weights)
         self.tokenDecoder.apply(_init_weights)

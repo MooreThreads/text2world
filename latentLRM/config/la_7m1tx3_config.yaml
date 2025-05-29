@@ -7,7 +7,7 @@ api_key_path: "./api_keys.yaml"
 use_tf32: true
 use_amp: true
 amp_dtype: "bf16"
-version: 4
+version: 1 # version 1 for 480 x 720, version 0 for 240 x 360
 video_model_path: '/jfs/shiyu.yang/models/CogVideoXV1.1-5b'
 
 data:
@@ -41,8 +41,7 @@ model:
     max_dist: 500.0
   
 training:
-  resume_ckpt: '/jfs/qian.ren/latentLRM/checkpoints/7m1tx3+bs32+dl3dv+re10k+acid+low+ver-2/checkpoint_000051800.pt'
-  # resume_ckpt: '/jfs/qian.ren/latentLRM/checkpoints/7m1tx3+bs32+dl3dv+ver-3/checkpoint_000001700.pt'
+  resume_ckpt: ''
   reset_training_state: true
   # optimizer
   lr: 0.00001
